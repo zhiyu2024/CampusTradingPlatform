@@ -11,8 +11,6 @@
     <modules>
         <module>campusTrading-common</module>
         <module>campusTrading-web</module>
-        <module>campusTrading-user</module>
-        <module>campusTrading-admin</module>
     </modules>
     <properties>
         <java.version>17</java.version>

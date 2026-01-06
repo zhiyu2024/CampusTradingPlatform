@@ -1,18 +1,18 @@
-package cn.gdsdxy.campustrading.common.controller;
+package cn.gdsdxy.campustrading.controller.user;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 用户表 前端控制器
+ * 商品分类 前端控制器
  * </p>
  *
  * @author CampusTrading
  * @since 2026-01-05
  */
 @RestController
-@RequestMapping("/usersEntity")
-public class UsersController {
+@RequestMapping("/categoriesEntity")
+public class UserCategoriesController {
 
 }

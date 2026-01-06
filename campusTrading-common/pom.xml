@@ -19,6 +19,62 @@
     </properties>
 
     <dependencies>
+        <!-- ================= 新增依赖开始 ================= -->
+
+        <!-- 1. Redis 依赖 (Spring Boot 3 版本) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- Redis 连接池 (Lettuce 需要) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <!-- 2. Spring Security (安全框架核心) -->
+        <!-- 注意：虽然配置在 Web 层，但 Common 层可能需要用到 Security 的上下文或注解 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- 3. JWT (JSON Web Token) 用于生成 Token -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 4. Hutool 工具包 (强烈推荐) -->
+        <!-- 它可以极大简化文件上传、文件名生成、ID生成、Bean拷贝等操作 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.25</version>
+        </dependency>
+
+        <!-- 5. FastJson2 (可选，用于 Redis 序列化，或者直接用 Jackson 也可以) -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.43</version>
+        </dependency>
+
+        <!-- ================= 新增依赖结束 ================= -->
+
         <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>

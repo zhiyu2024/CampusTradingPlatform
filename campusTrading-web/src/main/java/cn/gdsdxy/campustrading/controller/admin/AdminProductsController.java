@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.controller;
+package cn.gdsdxy.campustrading.controller.admin;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/productsEntity")
-public class ProductsController {
+public class AdminProductsController {
 
 }

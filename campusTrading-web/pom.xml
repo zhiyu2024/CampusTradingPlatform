@@ -24,15 +24,5 @@
             <artifactId>campusTrading-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>cn.gdsdxy</groupId>
-            <artifactId>campusTrading-user</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.gdsdxy</groupId>
-            <artifactId>campusTrading-admin</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>
