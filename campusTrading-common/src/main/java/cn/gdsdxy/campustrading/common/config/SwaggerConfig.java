@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public GroupedOpenApi apiGroup() {
         return GroupedOpenApi.builder()
                 .group("A-管理员模块")  // 分组名称
-                .packagesToScan("cn.gdsdxy.campustrading")  // 扫描的包路径
+                .packagesToScan("cn.gdsdxy.campustrading.controller")  // 扫描的包路径
                 // .pathsToMatch("/api/**")  // 路径匹配（可选）
                 .build();
     }
@@ -23,7 +23,7 @@ public class SwaggerConfig {
     public GroupedOpenApi apiGroup2() {
         return GroupedOpenApi.builder()
                 .group("B-用户模块")  // 分组名称
-                .packagesToScan("cn.gdsdxy.campustrading.controller")  // 扫描的包路径
+                .packagesToScan("cn.gdsdxy.campustrading.controller.user")  // 扫描的包路径
                 // .pathsToMatch("/api/**")  // 路径匹配（可选）
                 .build();
     }

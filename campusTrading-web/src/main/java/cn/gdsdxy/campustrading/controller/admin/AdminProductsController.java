@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2026-01-05
  */
 @RestController
-@RequestMapping("/productsEntity")
+@RequestMapping("/api/admin")
 public class AdminProductsController {
 
 }
