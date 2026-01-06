@@ -1,5 +1,6 @@
 package cn.gdsdxy.campustrading.common.service;
 
+import cn.gdsdxy.campustrading.common.controller.vo.LoginVo;
 import cn.gdsdxy.campustrading.common.entity.UsersEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2026-01-05
  */
 public interface IUsersService extends IService<UsersEntity> {
-
+    String UserLogin(LoginVo loginVo);
 }

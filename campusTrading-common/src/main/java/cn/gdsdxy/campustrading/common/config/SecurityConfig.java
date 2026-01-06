@@ -8,7 +8,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    @Bean
+//    配置“白名单”（登录接口、静态资源允许匿名访问），其他接口必须验证。
+    @Bean  //这里设置的白名单是所有都可以登录
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
