@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("cn.gdsdxy.campustrading.common.mapper") // ✅ 添加这行
-
 public class CampusTradingApplication {
 
     public static void main(String[] args) {
