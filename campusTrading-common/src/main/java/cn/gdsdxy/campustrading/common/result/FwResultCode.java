@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.common.result;
+package cn.gdsdxy.campustrading.common.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,9 +18,11 @@ public enum FwResultCode {
     FORBIDDEN(403, "无权限执行该操作"),
 
     // 业务相关错误
-    USER_NOT_EXIST(1001, "用户不存在"),
-    PASSWORD_ERROR(1002, "密码错误"),
-    PARAM_ERROR(1003, "参数错误");
+    USER_LOGIN_ERROR(1001,"用户名或密码错误"),
+    PARAM_ERROR(1002, "参数错误");
+
+
+
 
     private final Integer code;
     private final String message;

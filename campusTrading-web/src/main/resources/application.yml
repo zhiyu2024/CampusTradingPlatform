@@ -48,6 +48,12 @@ spring:
         - classpath:/static/
         - classpath:/public/
         - file:${user.dir}/CampusTrading/uploads/
+# JWT 配置（添加到 logging 前面）
+jwt:
+  secret: "y+HplX6gEqD1lmIrXxcBCc1ICw4/rh/P09+WUhBSx1ICbpGnAirL4R0STwCOJZK4qrqlEDFcA0rENEFtRiqwQg=="
+  expiration: 604800000  # 7天（可选，单位毫秒）
+
+
 
 # Logging 日志单独一级
 logging:
@@ -56,8 +62,8 @@ logging:
   charset:
     console: UTF-8
   level:
-    cn.gdsdxy.campustrading: INFO
-    org.springframework: INFO
+    cn.gdsdxy.campustrading: WARN
+    org.springframework: WARN
 
 # MyBatis-Plus 配置 (统一使用 mybatis-plus，删除原 mybatis 配置)
 mybatis-plus:

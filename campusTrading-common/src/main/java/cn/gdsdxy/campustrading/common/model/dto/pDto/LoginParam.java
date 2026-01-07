@@ -1,9 +1,9 @@
-package cn.gdsdxy.campustrading.common.controller.vo;
+package cn.gdsdxy.campustrading.common.model.dto.pDto;
 
 import lombok.Data;
 
 @Data
-public class LoginVo {
+public class LoginParam {
     private String username;
     private String password;
 }

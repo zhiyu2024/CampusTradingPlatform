@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.utils;
+package cn.gdsdxy.campustrading.common.util;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;

@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.common;
+package cn.gdsdxy.campustrading.common.util;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;

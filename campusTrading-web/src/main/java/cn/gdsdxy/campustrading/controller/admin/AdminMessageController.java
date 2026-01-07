@@ -1,10 +1,9 @@
-package cn.gdsdxy.campustrading.common.controller;
+package cn.gdsdxy.campustrading.controller.admin;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
-public class publicRegestController {
-
+@RequestMapping("/api/admin")
+public class AdminMessageController {
 }

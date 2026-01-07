@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.common.result;
+package cn.gdsdxy.campustrading.common.result;
 
 import lombok.Data;
 import java.io.Serializable;

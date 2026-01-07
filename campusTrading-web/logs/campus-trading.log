@@ -1,0 +1,21 @@
+2026-01-07T10:44:05.102+08:00  INFO 31724 --- [main] c.g.campustrading.CampusTradingTest      : Starting CampusTradingTest using Java 17.0.12 with PID 31724 (started by jy in D:\A期末实习校园二手交易平台_开学季高并发版_项目\简易版的校园二手交易平台项目\CampusTradingPlatfrom\CampusTrading\campusTrading-web)
+2026-01-07T10:44:05.106+08:00  INFO 31724 --- [main] c.g.campustrading.CampusTradingTest      : No active profile set, falling back to 1 default profile: "default"
+2026-01-07T10:44:06.994+08:00  INFO 31724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-01-07T10:44:06.999+08:00  INFO 31724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-01-07T10:44:07.077+08:00  INFO 31724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 60 ms. Found 0 JDBC repository interfaces.
+2026-01-07T10:44:07.104+08:00  INFO 31724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-01-07T10:44:07.106+08:00  INFO 31724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-01-07T10:44:07.144+08:00  INFO 31724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 Redis repository interfaces.
+2026-01-07T10:44:12.426+08:00  WARN 31724 --- [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: c7894fd1-717e-48a8-a3cb-173af0ba2388
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-07T10:44:12.934+08:00  INFO 31724 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@63bca84d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6141647f, org.springframework.security.web.context.SecurityContextHolderFilter@36cfe107, org.springframework.security.web.header.HeaderWriterFilter@26101efc, org.springframework.security.web.authentication.logout.LogoutFilter@26f75d9c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@56266bda, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@53b7bf01, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6f6c8d45, org.springframework.security.web.access.ExceptionTranslationFilter@277bc3a5, org.springframework.security.web.access.intercept.AuthorizationFilter@580ffea]
+2026-01-07T10:44:14.743+08:00  INFO 31724 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-07T10:44:15.333+08:00  INFO 31724 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6b5e1fc5
+2026-01-07T10:44:15.338+08:00  INFO 31724 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-01-07T10:44:16.265+08:00  INFO 31724 --- [main] c.g.campustrading.CampusTradingTest      : Started CampusTradingTest in 11.953 seconds (process running for 14.288)
+2026-01-07T10:44:17.025+08:00  INFO 31724 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-01-07T10:44:17.042+08:00  INFO 31724 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

@@ -17,19 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2026-01-05
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserUsersController {
-    @Autowired
-    IUsersService iUsersService;
 
-    @GetMapping("/mima")
-    public boolean mima(){
-        UsersEntity user =iUsersService.getById(3);
-        String mima=user.getPassword();
-        // 1. 初始化 Spring Security 推荐的加密器
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        boolean isMatch = encoder.matches("123456", mima);
-        return isMatch;
-    }
 
 }
