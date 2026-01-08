@@ -6,16 +6,24 @@ import cn.gdsdxy.campustrading.common.model.dto.uDto.ProductUpdateParam;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IProductsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j // ✅ 添加日志
 @RestController
 @RequestMapping("/api/user/product")
+@Tag(name = "用户商品管理", description = "用户商品相关接口") // ✅ 使用 @Tag
 public class UserProductController {
 
     @Autowired
     IProductsService iProductsService;
+    @PostMapping(value = "/delete")
+    public FwResult deleteByProduct(@RequestParam Integer productId){
+        return iProductsService.deleteProduct(productId);
+    }
 
     @PostMapping(value = "/update", consumes = "multipart/form-data")
     public FwResult<ProductVo> UpdateProduct(ProductUpdateParam productUpdateParam){

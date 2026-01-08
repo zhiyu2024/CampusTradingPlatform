@@ -2,6 +2,7 @@ package cn.gdsdxy.campustrading.common.service.impl;
 
 import cn.gdsdxy.campustrading.common.entity.ProductImagesEntity;
 import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
+import cn.gdsdxy.campustrading.common.exception.BusinessException;
 import cn.gdsdxy.campustrading.common.mapper.ProductImagesMapper;
 import cn.gdsdxy.campustrading.common.mapper.ProductsMapper;
 import cn.gdsdxy.campustrading.common.model.dto.uDto.ProductDto;
@@ -20,6 +21,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +46,40 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
 
     @Value("${file.upload-images-path}") // ✅ 从配置读取路径
     private String uploadImagesPath;
+
+    @Override
+    public   FwResult deleteProduct(Integer productId ){
+        Long sellerId=SecurityUtil.getUserId();//当前用户
+        ProductsEntity productsEntity=productsMapper.selectById(productId);//查询获取该商品
+        if(!sellerId.equals(productsEntity.getSellerId().longValue())){//商品的卖家
+            throw new BusinessException(1008,"无权限删除");
+        }
+        //  查询该商品所有图片
+        LambdaQueryWrapper<ProductImagesEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ProductImagesEntity::getProductId, productId);
+        List<ProductImagesEntity> images = productImagesMapper.selectList(wrapper);
+
+        //  删除图片表记录
+        if (!images.isEmpty()) {
+            productImagesMapper.delete(wrapper);
+            log.info("删除商品 {} 的图片记录 {} 条", productId, images.size());
+        }
+
+        this.deleteProduct(productId);
+        log.info("删除商品 {}", productId);
+
+//  异步删除物理文件（避免阻塞主线程）
+        if (!images.isEmpty()) {
+            deleteProductImagesAsync(images);
+        }
+        return FwResult.ok( "商品删除成功");
+    }
+    @Async // 需要启用 @EnableAsync
+    public void deleteProductImagesAsync(List<ProductImagesEntity> images) {
+        for (ProductImagesEntity image : images) {
+            deletePhysicalFile(image.getImageUrl());
+        }
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ProductVo updateProduct(ProductUpdateParam productUpdateParam) {

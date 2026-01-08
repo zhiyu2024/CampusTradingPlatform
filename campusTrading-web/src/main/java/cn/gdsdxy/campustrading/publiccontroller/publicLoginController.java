@@ -4,9 +4,12 @@ import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.model.dto.pDto.LoginParam;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.LoginVo;
 import cn.gdsdxy.campustrading.common.service.IUsersService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@Slf4j // ✅ 添加日志
+@Tag(name = "公共接口管理") // ✅ 使用 @Tag
 @RestController
 @RequestMapping("/api/public")
 public class publicLoginController {
