@@ -6,16 +6,20 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 public class MybatisPlusConfig {
 
-    /**
-     * 添加分页插件
-     */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+
+        // 分页插件
+        PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
+        paginationInterceptor.setMaxLimit(50L); // 单页最大50条
+        paginationInterceptor.setOverflow(false); // 超过最大页数返回第一页
+
+        interceptor.addInnerInterceptor(paginationInterceptor);
         return interceptor;
     }
 }

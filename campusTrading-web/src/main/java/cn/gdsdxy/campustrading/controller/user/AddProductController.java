@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.publiccontroller;
+package cn.gdsdxy.campustrading.controller.user;
 
 import cn.gdsdxy.campustrading.common.model.dto.aDto.ProductDto;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
@@ -28,6 +28,7 @@ public class AddProductController {
         ProductVo productVo = iProductsService.AddProduct(productDto);
         return FwResult.ok(productVo);
     }
+
 }
 //    @PostMapping("/product")  //含图片上传,不能用 /product 要formdata  而且不能用RequestBody 要用:ModelAttribute
 //    public FwResult<ProductVo> AddProductCon(@RequestBody ProductDto productDto){
