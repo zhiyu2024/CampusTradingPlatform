@@ -4,16 +4,19 @@ import cn.gdsdxy.campustrading.common.entity.ProductImagesEntity;
 import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
 import cn.gdsdxy.campustrading.common.mapper.ProductImagesMapper;
 import cn.gdsdxy.campustrading.common.mapper.ProductsMapper;
-import cn.gdsdxy.campustrading.common.model.dto.aDto.ProductDto;
+import cn.gdsdxy.campustrading.common.model.dto.uDto.ProductDto;
+import cn.gdsdxy.campustrading.common.model.dto.uDto.ProductUpdateParam;
+import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IProductsService;
 import cn.gdsdxy.campustrading.common.util.SecurityUtil;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +31,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,7 +44,149 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
 
     @Value("${file.upload-images-path}") // ✅ 从配置读取路径
     private String uploadImagesPath;
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ProductVo updateProduct(ProductUpdateParam productUpdateParam) {
+        // 1. 获取当前用户ID
+        Long userId = SecurityUtil.getUserId();
 
+        // 2. 验证商品是否存在且属于当前用户
+        ProductsEntity product = this.getById(productUpdateParam.getProductId());
+        if (product == null) {
+            throw new RuntimeException("商品不存在");
+        }
+        if (!userId.equals(product.getSellerId().longValue())) {
+            throw new RuntimeException("无权修改此商品");
+        }
+
+        // 3. 更新商品基本信息（只更新非空字段）
+        if (productUpdateParam.getProductName() != null) {
+            product.setProductName(productUpdateParam.getProductName());
+        }
+        if (productUpdateParam.getDescription() != null) {
+            product.setDescription(productUpdateParam.getDescription());
+        }
+        if (productUpdateParam.getPrice() != null) {
+            product.setPrice(productUpdateParam.getPrice());
+        }
+        if (productUpdateParam.getCategoryId() != null) {
+            product.setCategoryId(productUpdateParam.getCategoryId());
+        }
+        if (productUpdateParam.getIsBargainable() != null) {
+            product.setIsBargainable(productUpdateParam.getIsBargainable().equals(1));
+        }
+        if (productUpdateParam.getDiscountRate() != null) {
+            product.setDiscountRate(productUpdateParam.getDiscountRate());
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        Date currentDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+        product.setUpdatedAt(currentDate);
+
+        // 4. ✅ 执行更新
+        this.updateById(product);
+
+        // 5. ✅ 删除指定的旧图片
+        if (productUpdateParam.getDeleteImageIds() != null &&
+                !productUpdateParam.getDeleteImageIds().isEmpty()) {
+
+            for (Integer imageId : productUpdateParam.getDeleteImageIds()) {
+                // 查询图片信息
+                ProductImagesEntity image = productImagesMapper.selectById(imageId);
+
+                // 验证图片是否属于当前商品
+                if (image != null && image.getProductId().equals(product.getProductId())) {
+                    // 删除数据库记录
+                    productImagesMapper.deleteById(imageId);
+
+                    // 删除物理文件
+                    deletePhysicalFile(image.getImageUrl());
+                }
+            }
+        }
+
+        // 6. ✅ 上传新图片
+        List<String> imageUrls = new ArrayList<>();
+        if (productUpdateParam.getNewImages() != null &&
+                !productUpdateParam.getNewImages().isEmpty()) {
+
+            // 查询现有图片的最大序号
+            LambdaQueryWrapper<ProductImagesEntity> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(ProductImagesEntity::getProductId, product.getProductId());
+            wrapper.orderByDesc(ProductImagesEntity::getSortOrder);
+            wrapper.last("LIMIT 1");
+            ProductImagesEntity lastImage = productImagesMapper.selectOne(wrapper);
+
+            // 确定新图片的起始序号（如果商品没有图片，从0开始）
+            int startIndex = (lastImage != null) ? lastImage.getSortOrder() : -1;
+
+            // 上传新图片
+
+            for (int i = 0; i < productUpdateParam.getNewImages().size(); i++) {
+                MultipartFile file = productUpdateParam.getNewImages().get(i);
+                if (!file.isEmpty()) {
+                    try {
+                        String savedFileName = saveFile(file, product.getProductId(), startIndex + i);
+                        String relativePath = "/res/images/" + savedFileName;
+
+                        ProductImagesEntity img = new ProductImagesEntity();
+                        img.setProductId(product.getProductId());
+                        img.setImageUrl(relativePath);
+                        img.setSortOrder(startIndex + i + 1);
+                        productImagesMapper.insert(img);
+
+                        imageUrls.add(relativePath);
+                    } catch (IOException e) {
+                        log.error("图片上传失败: {}", file.getOriginalFilename(), e);
+                        throw new RuntimeException("图片上传失败: " + e.getMessage(), e);
+                    }
+                }
+            }
+        }
+
+        // 7. 查询该商品所有剩余图片（按sortOrder排序）
+        LambdaQueryWrapper<ProductImagesEntity> finalWrapper = new LambdaQueryWrapper<>();
+        finalWrapper.eq(ProductImagesEntity::getProductId, product.getProductId());
+        finalWrapper.orderByAsc(ProductImagesEntity::getSortOrder);
+        List<ProductImagesEntity> finalImages = productImagesMapper.selectList(finalWrapper);
+
+        // 获取所有图片URL
+        imageUrls = finalImages.stream()
+                .map(ProductImagesEntity::getImageUrl)
+                .collect(Collectors.toList());
+
+        // 8. 构建返回 VO
+        ProductVo vo = new ProductVo();
+        vo.setProductId(Long.valueOf(product.getProductId()));
+        vo.setSellerId(userId);
+        vo.setProductName(product.getProductName());
+        vo.setImageUrl(imageUrls); //
+        vo.setMessage("商品更新成功");
+
+        return vo;
+    }
+
+    /**
+     * 删除物理文件（建议异步执行）
+     */
+    private void deletePhysicalFile(String imageUrl) {
+        try {
+            if (imageUrl != null && imageUrl.startsWith("/res/images/")) {
+                String fileName = imageUrl.substring("/res/images/".length());
+                File file = new File(uploadImagesPath + fileName);
+                if (file.exists()) {
+                    boolean deleted = file.delete();
+                    if (deleted) {
+                        log.info("成功删除旧图片文件: {}", file.getAbsolutePath());
+                    } else {
+                        log.warn("删除文件失败: {}", file.getAbsolutePath());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("删除物理文件失败: {}", imageUrl, e);
+        }
+    }
     @Override
     public IPage<ProductsEntity> selectProductPage(Integer pageNum, Integer pageSize) {
         // 创建分页对象（当前页，每页大小）
@@ -108,7 +254,7 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
             }
 
             // 4. 构建返回 VO
-            ProductVo vo = new ProductVo();
+            ProductVo vo=new ProductVo();
             vo.setProductId(Long.valueOf(product.getProductId()));
             vo.setSellerId(userId);
             vo.setProductName(product.getProductName());
