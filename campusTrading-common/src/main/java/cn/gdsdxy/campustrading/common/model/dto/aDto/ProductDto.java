@@ -12,7 +12,7 @@ public class ProductDto {
     private String description;        // 详细描述
     private BigDecimal price;          // 价格
     private Integer categoryId;        // 分类ID
-    private Integer sellerId;          // 卖家ID
+//    private Integer sellerId;          // 卖家ID
     private Integer isBargainable;     // 是否支持砍价
     private BigDecimal discountRate;   // 折扣率
     private List<MultipartFile> imageUrl; // 图片文件列表

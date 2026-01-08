@@ -19,6 +19,13 @@
     </properties>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>javax.servlet-api</artifactId>-->
+<!--            <version>4.0.1</version>  &lt;!&ndash; ✅ 必须添加版本号 &ndash;&gt;-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
         <!-- ================= 新增依赖开始 ================= -->
 
         <!-- 1. Redis 依赖 (Spring Boot 3 版本) -->
@@ -37,8 +44,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.7.18</version>
         </dependency>
-
         <!-- 3. JWT (JSON Web Token) 用于生成 Token -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

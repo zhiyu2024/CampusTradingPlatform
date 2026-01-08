@@ -27,8 +27,8 @@ public class JwtUtils {
      */
     public String createToken(Long userId, String username) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
-        claims.put("username", username);
+        claims.put("userId", userId);   //Token里面包含的信息,只有用户id和用户名,但是有用户名就密码和一切都有了
+        claims.put("username", username);  //所以解析token是很重要的
 
         // 将字符串密钥转为 SecretKey（关键修复）
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());

@@ -12,6 +12,7 @@ import java.util.List;
 public class ProductVo {
     private Long productId;
     private String productName;
+    private Long sellerId;
     private List<String> imageUrl; // 返回URL
     private String message;
 }
