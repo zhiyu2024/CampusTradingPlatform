@@ -1,6 +1,7 @@
 package cn.gdsdxy.campustrading.common.model.dto.publicDto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class RegisterParam {
@@ -13,7 +14,7 @@ public class RegisterParam {
     /**
      * 头像URL
      */
-    private String avatar;
+    private MultipartFile avatar;  // 头像文件
     private String campus;
 
     /**

@@ -2,7 +2,9 @@ package cn.gdsdxy.campustrading.common.service;
 
 import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductDto;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductSearchParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
@@ -23,5 +25,9 @@ public interface IProductsService extends IService<ProductsEntity> {
     ProductVo updateProduct(ProductUpdateParam productUpdateParam);
     FwResult deleteByProduct(Integer productId );
     ProductDetailVo getProductDetail(Integer productId);
+    /**
+     * 搜索商品
+     */
+    PageVo<ProductVo> searchProducts(ProductSearchParam param);
 
 }

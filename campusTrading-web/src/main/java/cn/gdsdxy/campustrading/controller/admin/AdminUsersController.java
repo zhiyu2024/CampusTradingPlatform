@@ -1,9 +1,12 @@
 package cn.gdsdxy.campustrading.controller.admin;
 
+import cn.gdsdxy.campustrading.common.model.dto.adminDto.AdminLoginParam;
+import cn.gdsdxy.campustrading.common.result.FwResult;
+import cn.gdsdxy.campustrading.common.service.IUsersService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -18,5 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class AdminUsersController {
+    @Autowired
+    IUsersService iAdminService;
+
+    @PostMapping("/login")
+    public FwResult<String> login(@RequestBody AdminLoginParam param) {
+        return iAdminService.login(param);
+    }
+
+    @GetMapping("/info")
+    public FwResult<Object> getAdminInfo() {
+        Object adminInfo = iAdminService.getAdminInfo();
+        return FwResult.ok(adminInfo);
+    }
+
+
+    @PostMapping("/logout")
+    public FwResult<String> logout() {
+        iAdminService.logout();
+        return FwResult.ok("退出成功");
+    }
 
 }

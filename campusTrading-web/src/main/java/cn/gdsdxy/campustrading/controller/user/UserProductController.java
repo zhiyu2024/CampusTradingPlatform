@@ -1,7 +1,9 @@
 package cn.gdsdxy.campustrading.controller.user;
 
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductDto;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductSearchParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
@@ -16,9 +18,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user/product")
 @Tag(name = "用户商品管理", description = "用户商品相关接口") // ✅ 使用 @Tag
 public class UserProductController {
-
     @Autowired
     IProductsService iProductsService;
+    /**
+     * 搜索商品
+     */
+    @GetMapping("/search")
+    public FwResult<PageVo<ProductVo>> searchProducts(@RequestParam ProductSearchParam param) {
+        PageVo<ProductVo> result = iProductsService.searchProducts(param);
+        return FwResult.ok(result);
+    }
+
+
 
 
     @PostMapping(value = "/delete")
@@ -27,7 +38,7 @@ public class UserProductController {
     }
 
     @PostMapping(value = "/update", consumes = "multipart/form-data")
-    public FwResult<ProductVo> UpdateProduct(ProductUpdateParam productUpdateParam){
+    public FwResult<ProductVo> UpdateProduct(@ModelAttribute ProductUpdateParam productUpdateParam){
         ProductVo productVo=iProductsService.updateProduct(productUpdateParam);
         return FwResult.ok(productVo);
    }
