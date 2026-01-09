@@ -62,7 +62,7 @@ public class UserUsersController {
     @PostMapping("/logout")
     public FwResult<String> logout(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        iUsersService.logout(token);
+        iUsersService.userLogout(token);
         return FwResult.ok("退出成功");
     }
 

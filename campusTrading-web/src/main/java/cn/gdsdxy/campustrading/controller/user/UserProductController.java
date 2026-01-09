@@ -51,7 +51,6 @@ public class UserProductController {
     public FwResult<ProductVo> addProductCon(@ModelAttribute ProductDto productDto) {
         // @ModelAttribute 用于接收 form-data 格式的数据（包含文件）
         // 相比 @RequestBody，它更适合文件上传场景
-
         ProductVo productVo = iProductsService.AddProduct(productDto);
         return FwResult.ok(productVo);
     }

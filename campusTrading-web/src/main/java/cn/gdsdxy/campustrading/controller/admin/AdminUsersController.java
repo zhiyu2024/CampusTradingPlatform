@@ -24,22 +24,22 @@ public class AdminUsersController {
     @Autowired
     IUsersService iAdminService;
 
-    @PostMapping("/login")
-    public FwResult<String> login(@RequestBody AdminLoginParam param) {
-        return iAdminService.login(param);
-    }
+//    @PostMapping("/login")
+//    public FwResult<AdminInfoVo> login(@RequestBody AdminLoginParam param) {
+//        AdminInfoVo adminInfoVo=   iAdminService.AdminLogin(param);
+//        return FwResult.ok(adminInfoVo);
+//    }
 
-    @GetMapping("/info")
-    public FwResult<Object> getAdminInfo() {
-        Object adminInfo = iAdminService.getAdminInfo();
-        return FwResult.ok(adminInfo);
-    }
+//    @GetMapping("/info")
+//    public FwResult<AdminInfoVo> getAdminInfo() {
+//        AdminInfoVo adminInfo = iAdminService.getAdminInfo();
+//        return FwResult.ok(adminInfo);
+//    }
 
-
-    @PostMapping("/logout")
-    public FwResult<String> logout() {
-        iAdminService.logout();
-        return FwResult.ok("退出成功");
-    }
+//    @PostMapping("/logout")
+//    public FwResult<String> logout() {
+//        iAdminService.AdminLogout();
+//        return FwResult.ok("退出成功");
+//    }
 
 }

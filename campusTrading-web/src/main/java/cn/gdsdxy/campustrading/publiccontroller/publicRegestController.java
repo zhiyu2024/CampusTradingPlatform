@@ -17,21 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/public")
 public class publicRegestController {
     @Autowired
-    private IUsersService userUsersService;
+    private IUsersService iUsersService;
 
     /**
      * 注册账号（支持头像上传）
      */
     @PostMapping(value = "/register" , consumes = "multipart/form-data")
-    public FwResult<RegisterVo> register(@RequestPart("param") RegisterParam param,
-                                         @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
-        param.setAvatar(avatar);
-        return FwResult.ok(userUsersService.registerUser(param));
+    public FwResult<RegisterVo> register(@ModelAttribute RegisterParam registerParam) {
+            RegisterVo registerVo=iUsersService.registerUser(registerParam);
+        return FwResult.ok(registerVo);
     }
 
-//    @PostMapping("/register")
-//    public FwResult<RegisterVo> Register(@RequestBody RegisterParam registerParam) {
-//        RegisterVo registerVo = userUsersService.registerUser(registerParam);
-//        return FwResult.ok(registerVo);
-//    }
+
 }

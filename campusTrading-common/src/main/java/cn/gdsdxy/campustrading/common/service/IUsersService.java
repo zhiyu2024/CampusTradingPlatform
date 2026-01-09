@@ -22,33 +22,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2026-01-05
  */
 public interface IUsersService extends IService<UsersEntity> {
-
-    UserInfoVo getUserInfo();  // 无参，内部自动获取
-    void updateUserInfo(UpdateUserParam param);  // 无userId参数
-    void logout(String token);
-
     LoginVo login(LoginParam loginParam);
     RegisterVo registerUser(RegisterParam registerParam);
+    UserInfoVo getUserInfo();  // 无参，内部自动获取
+    void updateUserInfo(UpdateUserParam param);  // 无userId参数
+    void userLogout(String token);
+//    void deleteUser(String phone,String username,String password);//可以加个注销用户
+//后面完善项目的时候再弄 时间不够了
 
-
-
-    /**
-     * 管理员登录
-     */
-    FwResult login(AdminLoginParam param);
-
-    /**
-     * 获取管理员信息
-     */
-    FwResult<AdminInfoVo> getAdminInfo();//String token
-
-    /**
-     * 管理员退出登录
-     */
-    FwResult logout();//String token
-
-    /**
-     * 获取数据概览
-     */
-    FwResult<DashboardVo>  getDashboardData();
+//    AdminVo AdminLogin(AdminLoginParam param);
+//   AdminInfoVo getAdminInfo();//String token
+//    void AdminLogout();//String token
+//    DashboardVo  getDashboardData();
 }

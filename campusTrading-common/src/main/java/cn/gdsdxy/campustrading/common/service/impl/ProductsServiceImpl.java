@@ -6,7 +6,9 @@ import cn.gdsdxy.campustrading.common.exception.BusinessException;
 import cn.gdsdxy.campustrading.common.mapper.ProductImagesMapper;
 import cn.gdsdxy.campustrading.common.mapper.ProductsMapper;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductDto;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductSearchParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
@@ -46,7 +48,10 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
 
     @Value("${file.upload-images-path}") // ✅ 从配置读取路径
     private String uploadImagesPath;
+    @Override
+    public  PageVo<ProductVo> searchProducts(ProductSearchParam param){
 
+    }
     @Override
     @Transactional
     public ProductDetailVo getProductDetail(Integer productId){
