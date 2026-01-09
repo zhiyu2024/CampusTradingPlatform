@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.model.dto.uDto;
+package cn.gdsdxy.campustrading.common.model.dto.userDto;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class ProductDto {
+    private Long productId;
     private String productName;        // 商品名称
     private String description;        // 详细描述
     private BigDecimal price;          // 价格

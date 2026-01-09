@@ -1,7 +1,7 @@
 package cn.gdsdxy.campustrading.publiccontroller;
 
 import cn.gdsdxy.campustrading.common.result.FwResult;
-import cn.gdsdxy.campustrading.common.model.dto.pDto.LoginParam;
+import cn.gdsdxy.campustrading.common.model.dto.publicDto.LoginParam;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.LoginVo;
 import cn.gdsdxy.campustrading.common.service.IUsersService;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,6 +1,7 @@
 package cn.gdsdxy.campustrading.common.mapper;
 
 import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -11,13 +12,18 @@ import java.util.List;
 @Mapper
 public interface ProductsMapper extends BaseMapper<ProductsEntity> {
 
-    @Insert({
-            "<script>",
-            "INSERT INTO products (product_name, description, price, category_id, seller_id, stock, status, view_count, is_bargainable, discount_rate, created_at, updated_at) VALUES ",
-            "<foreach collection='list' item='item' separator=','>",
-            "(#{item.productName}, #{item.description}, #{item.price}, #{item.categoryId}, #{item.sellerId}, #{item.stock}, #{item.status}, #{item.viewCount}, #{item.isBargainable}, #{item.discountRate}, #{item.createdAt}, #{item.updatedAt})",
-            "</foreach>",
-            "</script>"
-    })
-    void batchInsert(@Param("list") List<ProductsEntity> list);
+    /**
+     * 查询商品详情（包含卖家信息）
+     */
+    ProductDetailVo selectProductDetailWithSeller(@Param("productId") Integer productId);
+
+    /**
+     * 查询商品图片列表
+     */
+    List<String> selectProductImages(@Param("productId") Integer productId);
+
+    /**
+     * 增加浏览量
+     */
+    void incrementViewCount(@Param("productId") Integer productId);
 }

@@ -1,8 +1,6 @@
 package cn.gdsdxy.campustrading.publiccontroller;
 
-import cn.gdsdxy.campustrading.common.model.dto.pDto.LoginParam;
-import cn.gdsdxy.campustrading.common.model.dto.pDto.RegisterParam;
-import cn.gdsdxy.campustrading.common.model.vo.publicVo.LoginVo;
+import cn.gdsdxy.campustrading.common.model.dto.publicDto.RegisterParam;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IUsersService;

@@ -8,6 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "用户购物车管理", description = "用户购物车相关接口") // ✅ 使用 @Tag
 @RestController
 @RequestMapping("/api/user")
-
 public class UserCartController {
 }

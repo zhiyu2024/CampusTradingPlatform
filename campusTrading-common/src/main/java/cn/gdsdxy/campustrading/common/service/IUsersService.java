@@ -1,8 +1,8 @@
 package cn.gdsdxy.campustrading.common.service;
 
-import cn.gdsdxy.campustrading.common.model.dto.pDto.LoginParam;
+import cn.gdsdxy.campustrading.common.model.dto.publicDto.LoginParam;
 import cn.gdsdxy.campustrading.common.entity.UsersEntity;
-import cn.gdsdxy.campustrading.common.model.dto.pDto.RegisterParam;
+import cn.gdsdxy.campustrading.common.model.dto.publicDto.RegisterParam;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.LoginVo;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
 import com.baomidou.mybatisplus.extension.service.IService;

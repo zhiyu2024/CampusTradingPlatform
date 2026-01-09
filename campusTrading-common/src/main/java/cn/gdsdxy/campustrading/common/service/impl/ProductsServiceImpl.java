@@ -5,19 +5,17 @@ import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
 import cn.gdsdxy.campustrading.common.exception.BusinessException;
 import cn.gdsdxy.campustrading.common.mapper.ProductImagesMapper;
 import cn.gdsdxy.campustrading.common.mapper.ProductsMapper;
-import cn.gdsdxy.campustrading.common.model.dto.uDto.ProductDto;
-import cn.gdsdxy.campustrading.common.model.dto.uDto.ProductUpdateParam;
-import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductDto;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IProductsService;
 import cn.gdsdxy.campustrading.common.util.SecurityUtil;
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -48,7 +48,38 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
     private String uploadImagesPath;
 
     @Override
-    public   FwResult deleteProduct(Integer productId ){
+    @Transactional
+    public ProductDetailVo getProductDetail(Integer productId){
+// 1. 查询商品详情（包含卖家信息）
+        ProductDetailVo detailVo = productsMapper.selectProductDetailWithSeller(productId);
+
+        if (detailVo == null) {
+            throw new BusinessException(1007,"商品不存在");
+        }
+
+        // 2. 计算折后价格
+        if (detailVo.getDiscountRate() != null && detailVo.getDiscountRate().compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal discountedPrice = detailVo.getPrice()
+                    .multiply(detailVo.getDiscountRate())
+                    .setScale(2, RoundingMode.HALF_UP);
+            detailVo.setDiscountedPrice(discountedPrice);
+        } else {
+            detailVo.setDiscountedPrice(detailVo.getPrice());
+        }
+
+        // 3. 查询商品图片列表
+        List<String> images = productsMapper.selectProductImages(productId);
+        detailVo.setImages(images);
+
+        // 4. 更新浏览量（异步或同步）
+        productsMapper.incrementViewCount(productId);
+
+        return detailVo;
+    }
+
+
+    @Override
+    public   FwResult deleteByProduct(Integer productId ){
         Long sellerId=SecurityUtil.getUserId();//当前用户
         ProductsEntity productsEntity=productsMapper.selectById(productId);//查询获取该商品
         if(!sellerId.equals(productsEntity.getSellerId().longValue())){//商品的卖家
@@ -65,7 +96,7 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
             log.info("删除商品 {} 的图片记录 {} 条", productId, images.size());
         }
 
-        this.deleteProduct(productId);
+        this.removeById(productId);
         log.info("删除商品 {}", productId);
 
 //  异步删除物理文件（避免阻塞主线程）

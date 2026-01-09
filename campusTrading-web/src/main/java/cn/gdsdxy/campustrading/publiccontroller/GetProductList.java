@@ -2,6 +2,7 @@ package cn.gdsdxy.campustrading.publiccontroller;
 
 import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IProductsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,8 +22,17 @@ import java.util.List;
 public class GetProductList {
     @Autowired
     private IProductsService iProductsService;
+    /**
+     * 获取商品详情
+     */
+    @GetMapping("/product/detail")
+    public FwResult<ProductDetailVo> getProductDetail(@RequestParam Integer productId) {
 
-    @GetMapping("/productList")
+        ProductDetailVo productDetail = iProductsService.getProductDetail(productId);
+        return FwResult.ok(productDetail);
+    }
+
+    @GetMapping("/product")
     public FwResult selectProduct(
             @RequestParam(defaultValue = "1") Integer pageNum,   // 第几页，默认第1页
             @RequestParam(defaultValue = "16") Integer pageSize  // ✅ 每页条数，默认16条

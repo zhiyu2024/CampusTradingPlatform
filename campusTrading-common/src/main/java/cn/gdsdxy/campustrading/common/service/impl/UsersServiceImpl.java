@@ -1,10 +1,10 @@
 package cn.gdsdxy.campustrading.common.service.impl;
 
 import cn.gdsdxy.campustrading.common.exception.BusinessException;
-import cn.gdsdxy.campustrading.common.model.dto.pDto.LoginParam;
+import cn.gdsdxy.campustrading.common.model.dto.publicDto.LoginParam;
 import cn.gdsdxy.campustrading.common.entity.UsersEntity;
 import cn.gdsdxy.campustrading.common.mapper.UsersMapper;
-import cn.gdsdxy.campustrading.common.model.dto.pDto.RegisterParam;
+import cn.gdsdxy.campustrading.common.model.dto.publicDto.RegisterParam;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
 import cn.gdsdxy.campustrading.common.result.FwResultCode;
 import cn.gdsdxy.campustrading.common.service.IUsersService;
@@ -19,7 +19,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.GeneralSecurityException;
 import java.util.concurrent.TimeUnit;
 
 /**

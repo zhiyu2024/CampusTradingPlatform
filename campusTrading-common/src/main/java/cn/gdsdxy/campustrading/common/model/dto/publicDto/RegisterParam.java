@@ -1,8 +1,6 @@
-package cn.gdsdxy.campustrading.common.model.dto.pDto;
+package cn.gdsdxy.campustrading.common.model.dto.publicDto;
 
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class RegisterParam {

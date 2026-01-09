@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.model.dto.uDto;
+package cn.gdsdxy.campustrading.common.model.dto.userDto;
 
 
 import lombok.Data;

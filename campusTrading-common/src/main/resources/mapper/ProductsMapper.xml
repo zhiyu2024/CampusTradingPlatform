@@ -2,4 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.gdsdxy.campustrading.common.mapper.ProductsMapper">
 
+    <!-- 查询商品详情（包含卖家信息） -->
+    <select id="selectProductDetailWithSeller" resultType="cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.description,
+            p.price,
+            p.discount_rate,
+            p.category_id,
+            c.category_name,
+            p.seller_id,
+            u.nickname as sellerNickname,
+            u.avatar as sellerAvatar,
+            u.campus as sellerCampus,
+            p.is_bargainable,
+            p.stock,
+            p.status,
+            p.view_count,
+            p.created_at,
+            p.updated_at
+        FROM products p
+                 LEFT JOIN users u ON p.seller_id = u.user_id
+                 LEFT JOIN categories c ON p.category_id = c.category_id
+        WHERE p.product_id = #{productId}
+    </select>
+
+    <!-- 查询商品图片列表 -->
+    <select id="selectProductImages" resultType="java.lang.String">
+        SELECT image_url
+        FROM product_images
+        WHERE product_id = #{productId}
+        ORDER BY sort_order ASC
+    </select>
+
+    <!-- 增加浏览量 -->
+    <update id="incrementViewCount">
+        UPDATE products
+        SET view_count = view_count + 1,
+            updated_at = NOW()
+        WHERE product_id = #{productId}
+    </update>
+
 </mapper>
