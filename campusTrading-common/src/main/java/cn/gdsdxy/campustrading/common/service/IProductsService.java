@@ -28,6 +28,6 @@ public interface IProductsService extends IService<ProductsEntity> {
     /**
      * 搜索商品
      */
-    PageVo<ProductVo> searchProducts(ProductSearchParam param);
+    IPage<ProductsEntity> searchProducts(Integer pageNum, Integer pageSize,ProductSearchParam param);
 
 }

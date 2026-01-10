@@ -49,9 +49,18 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
     @Value("${file.upload-images-path}") // ✅ 从配置读取路径
     private String uploadImagesPath;
     @Override
-    public  PageVo<ProductVo> searchProducts(ProductSearchParam param){
+    public  IPage<ProductsEntity> searchProducts(Integer pageNum, Integer pageSize,ProductSearchParam param){
 
     }
+    @Override
+    public IPage<ProductsEntity> selectProductPage(Integer pageNum, Integer pageSize) {
+        // 创建分页对象（当前页，每页大小）
+        Page<ProductsEntity> page = new Page<>(pageNum, pageSize);
+
+        // 执行分页查询，返回结果自动包含总页数
+        return productsMapper.selectPage(page, null);
+    }
+
     @Override
     @Transactional
     public ProductDetailVo getProductDetail(Integer productId){
@@ -258,14 +267,6 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
         } catch (Exception e) {
             log.warn("删除物理文件失败: {}", imageUrl, e);
         }
-    }
-    @Override
-    public IPage<ProductsEntity> selectProductPage(Integer pageNum, Integer pageSize) {
-        // 创建分页对象（当前页，每页大小）
-        Page<ProductsEntity> page = new Page<>(pageNum, pageSize);
-
-        // 执行分页查询，返回结果自动包含总页数
-        return productsMapper.selectPage(page, null);
     }
 
     @Override

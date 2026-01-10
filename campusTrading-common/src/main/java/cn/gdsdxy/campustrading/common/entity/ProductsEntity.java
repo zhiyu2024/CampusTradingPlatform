@@ -3,6 +3,7 @@ package cn.gdsdxy.campustrading.common.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,8 +20,7 @@ import java.util.Date;
  * @author CampusTrading
  * @since 2026-01-05
  */
-@Getter
-@Setter
+@Data
 @ToString
 @TableName("products")
 public class ProductsEntity implements Serializable {

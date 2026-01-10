@@ -28,7 +28,7 @@ public class CartEntity implements Serializable {
 
     @TableId(value = "cart_id", type = IdType.AUTO)
     private Integer cartId;
-
+    private Integer quantity;
     /**
      * 用户ID
      */

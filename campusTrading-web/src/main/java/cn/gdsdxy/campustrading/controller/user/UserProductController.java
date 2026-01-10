@@ -1,5 +1,6 @@
 package cn.gdsdxy.campustrading.controller.user;
 
+import cn.gdsdxy.campustrading.common.entity.ProductsEntity;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductDto;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductSearchParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
@@ -8,6 +9,7 @@ import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IProductsService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,12 @@ public class UserProductController {
      * 搜索商品
      */
     @GetMapping("/search")
-    public FwResult<PageVo<ProductVo>> searchProducts(@RequestParam ProductSearchParam param) {
-        PageVo<ProductVo> result = iProductsService.searchProducts(param);
-        return FwResult.ok(result);
+    public FwResult<IPage<ProductsEntity>> searchProducts(
+            @RequestParam(defaultValue = "1") Integer pageNum,   // 第几页，默认第1页
+            @RequestParam(defaultValue = "16") Integer pageSize,  // ✅ 每页条数，默认16条
+            @RequestParam ProductSearchParam param) {
+        IPage<ProductsEntity> products = iProductsService.searchProducts( pageNum, pageSize,param);
+        return FwResult.ok(products);
     }
 
 

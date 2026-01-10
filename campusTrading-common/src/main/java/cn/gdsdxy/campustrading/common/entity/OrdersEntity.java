@@ -34,6 +34,7 @@ public class OrdersEntity implements Serializable {
      * 订单号
      */
     private String orderNo;
+    private Integer quantity;
 
     /**
      * 商品ID
