@@ -22,6 +22,7 @@ public class ProductDetailVo {
     private String sellerCampus;
     private Integer isBargainable;
     private Integer stock;
+    private String campus;         // 校区
     private Integer status;
     private Integer viewCount;
     private List<String> images;

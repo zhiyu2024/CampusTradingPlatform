@@ -6,6 +6,7 @@ import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductSearchParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductListVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,13 +22,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IProductsService extends IService<ProductsEntity> {
     ProductVo AddProduct(ProductDto productDto);
-    IPage<ProductsEntity> selectProductPage(Integer pageNum, Integer pageSize);
+    IPage<ProductListVo> selectProductPage(Integer pageNum, Integer pageSize);
     ProductVo updateProduct(ProductUpdateParam productUpdateParam);
     FwResult deleteByProduct(Integer productId );
     ProductDetailVo getProductDetail(Integer productId);
     /**
      * 搜索商品
      */
-    IPage<ProductsEntity> searchProducts(Integer pageNum, Integer pageSize,ProductSearchParam param);
+    IPage<ProductListVo> searchProducts(Integer pageNum, Integer pageSize,ProductSearchParam param);
 
 }

@@ -10,15 +10,19 @@ import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductSearchParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.ProductUpdateParam;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductDetailVo;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductListVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.ProductVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IProductsService;
+import org.apache.commons.lang3.StringUtils;
 import cn.gdsdxy.campustrading.common.util.SecurityUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -49,16 +53,83 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, ProductsEnt
     @Value("${file.upload-images-path}") // ✅ 从配置读取路径
     private String uploadImagesPath;
     @Override
-    public  IPage<ProductsEntity> searchProducts(Integer pageNum, Integer pageSize,ProductSearchParam param){
-
-    }
-    @Override
-    public IPage<ProductsEntity> selectProductPage(Integer pageNum, Integer pageSize) {
-        // 创建分页对象（当前页，每页大小）
+    public IPage<ProductListVo> searchProducts(Integer pageNum, Integer pageSize, ProductSearchParam param) {
+        // 1. 创建分页对象
         Page<ProductsEntity> page = new Page<>(pageNum, pageSize);
 
-        // 执行分页查询，返回结果自动包含总页数
-        return productsMapper.selectPage(page, null);
+        // 2. 构建搜索条件（支持关键词、分类、砍价、折扣）
+        LambdaQueryWrapper<ProductsEntity> wrapper = Wrappers.<ProductsEntity>lambdaQuery()
+                // ✅ 关键词模糊搜索（商品名称）
+                .like(StringUtils.isNotBlank(param.getKeyword()),
+                        ProductsEntity::getProductName, param.getKeyword())
+
+                // 分类精确搜索
+                .eq(param.getCategoryId() != null,
+                        ProductsEntity::getCategoryId, param.getCategoryId())
+
+                // 是否支持砍价
+                .eq(param.getIsBargainable() != null,
+                        ProductsEntity::getIsBargainable, param.getIsBargainable())
+
+                // 是否有折扣（折扣率 < 1）
+                .lt(param.getHasDiscount() != null && param.getHasDiscount(),
+                        ProductsEntity::getDiscountRate, BigDecimal.ONE)
+
+                //  只查询在售商品（可选）
+                .eq(ProductsEntity::getStatus, 1)
+
+                //  按创建时间倒序（最新商品在前）
+                .orderByDesc(ProductsEntity::getCreatedAt);
+
+        // 3. 执行分页查询
+        IPage<ProductsEntity> entityPage = productsMapper.selectPage(page, wrapper);
+
+        // 4. 转换为VO并封装图片列表
+        return entityPage.convert(entity -> {
+            ProductListVo vo = new ProductListVo();
+            BeanUtils.copyProperties(entity, vo);
+
+            // 查询该商品的所有图片（按sort_order排序）
+            List<ProductImagesEntity> images = productImagesMapper.selectList(
+                    Wrappers.<ProductImagesEntity>lambdaQuery()
+                            .eq(ProductImagesEntity::getProductId, entity.getProductId())
+                            .orderByAsc(ProductImagesEntity::getSortOrder)
+            );
+
+            // 提取URL列表
+            List<String> imageUrls = images.stream()
+                    .map(ProductImagesEntity::getImageUrl)
+                    .collect(Collectors.toList());
+
+            vo.setImageUrls(imageUrls);  // 设置到VO
+
+            return vo;
+        });
+    }
+    @Override
+    public IPage<ProductListVo> selectProductPage(Integer pageNum, Integer pageSize) {
+        Page<ProductsEntity> page = new Page<>(pageNum, pageSize);
+        IPage<ProductsEntity> entityPage = baseMapper.selectPage(page, null);
+
+        return entityPage.convert(entity -> {
+            ProductListVo vo = new ProductListVo();
+            BeanUtils.copyProperties(entity, vo);
+
+            // 查询该商品的所有图片，按sort_order排序
+            List<ProductImagesEntity> images = productImagesMapper.selectList(
+                    Wrappers.<ProductImagesEntity>lambdaQuery()
+                            .eq(ProductImagesEntity::getProductId, entity.getProductId())
+                            .orderByAsc(ProductImagesEntity::getSortOrder)
+            );
+// 转换为URL列表
+            List<String> imageUrls = images.stream()
+                    .map(ProductImagesEntity::getImageUrl)
+                    .collect(Collectors.toList());
+
+            vo.setImageUrls(imageUrls);
+            return vo;
+        });
+
     }
 
     @Override

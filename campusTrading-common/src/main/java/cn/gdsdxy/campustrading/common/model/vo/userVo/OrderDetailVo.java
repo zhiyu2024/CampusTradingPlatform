@@ -9,12 +9,14 @@ import java.util.List;
 public class OrderDetailVo {
     private Integer orderId;
     private String orderNo;
+    private Integer productId;
+    private String productName;
+    private BigDecimal price;
+    private Integer quantity;
     private Integer status;
     private BigDecimal totalAmount;
     private String buyerNote;
-    private UserInfoVo buyerInfo;
-    private UserInfoVo sellerInfo;
-    private List<ProductVo> products;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Integer sellerId;
+    private String sellerNickname; // 卖家昵称（需关联用户表）
 }

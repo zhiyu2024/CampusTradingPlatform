@@ -8,7 +8,6 @@ public class ProductSearchParam {
     private Integer categoryId;//分类ID
     private Boolean isBargainable;//是否支持砍价
     private Boolean hasDiscount;//是否有折扣
-    private String campus;//校区
     private Integer pageNum = 1;//页码
 //    @ApiModelProperty(value = "最低价格")
 //    private Double minPrice;//最低价格

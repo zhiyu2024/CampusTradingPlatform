@@ -9,10 +9,12 @@ import java.util.List;
 public class OrderListVo {
     private Integer orderId;
     private String orderNo;
+    private Integer productId;
     private String productName;
-    private List<String> productImage;
-    private Integer status;
+    private String productImage; // 列表只显示第一张图
     private BigDecimal totalAmount;
-    private String oppositeNickname;//对方用户名称 /卖家昵称
+    private Integer status;
     private LocalDateTime createdAt;
+    private Integer oppositeId; // 对方ID（买家看是卖家ID，卖家看是买家ID）
+    private String oppositeName; // 对方名称
 }

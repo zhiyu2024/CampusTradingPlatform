@@ -5,5 +5,4 @@ import lombok.Data;
 @Data
 public class OrderPayParam {
     private Integer orderId;
-    private Integer payMethod;
 }

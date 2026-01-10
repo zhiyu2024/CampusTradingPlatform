@@ -6,6 +6,10 @@ import java.util.List;
 
 @Data
 public class OrderCreateParam {
+    private Integer productId;
+
+    private Integer quantity;
+
+    private String buyerNote; // 买家留言
     private List<Integer> productIds;
-    private String payType;//支付方式
 }
