@@ -27,7 +27,7 @@ public interface IMessagesService extends IService<MessagesEntity> {
     /**
      * 获取聊天记录
      */
-    List<MessageVo> getChatRecord(Integer productId, String ortherUserId);//Integer userId,ortherUserId是卖家的id 前端应该是通过昵称获取?
+    List<MessageVo> getChatRecord(Integer productId, Integer ortherUserId);//Integer userId,ortherUserId是卖家的id 前端应该是通过昵称获取?
 
     /**
      * 标记消息已读

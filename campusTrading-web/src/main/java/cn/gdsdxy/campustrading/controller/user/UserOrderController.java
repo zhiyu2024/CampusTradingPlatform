@@ -7,6 +7,7 @@ import cn.gdsdxy.campustrading.common.model.vo.userVo.OrderListVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.PageVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IOrdersService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,23 +52,21 @@ public class UserOrderController {
      * 订单列表（买家视角）
      */
     @GetMapping("/buyer/list")
-    public FwResult<PageVo<OrderListVo>> getBuyerOrderList(
-                                                           @RequestParam(required = false) Integer status,
-                                                           @RequestParam(defaultValue = "1") Integer pageNum,
-                                                           @RequestParam(defaultValue = "16") Integer pageSize) {
-        PageVo<OrderListVo> list = iOrdersService.getBuyerOrderList(status, pageNum, pageSize);
-        return FwResult.ok(list);
+    public FwResult<IPage<OrderListVo>> getBuyerOrderList(
+            @RequestParam(required = false) Integer status,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "16") Integer pageSize) {
+        return FwResult.ok(iOrdersService.getBuyerOrderList(status, pageNum, pageSize));
     }
-
     /**
      * 订单列表（卖家视角）
      */
     @GetMapping("/seller/list")
-    public FwResult<PageVo<OrderListVo>> getSellerOrderList(@RequestParam(required = false) Integer status,
-                                                            @RequestParam(defaultValue = "1") Integer pageNum,
-                                                            @RequestParam(defaultValue = "16") Integer pageSize) {
-        PageVo<OrderListVo> list = iOrdersService.getSellerOrderList( status, pageNum, pageSize);
-        return FwResult.ok(list);
+    public FwResult<IPage<OrderListVo>> getSellerOrderList(
+            @RequestParam(required = false) Integer status,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "16") Integer pageSize) {
+        return FwResult.ok(iOrdersService.getSellerOrderList(status, pageNum, pageSize));
     }
 
     /**

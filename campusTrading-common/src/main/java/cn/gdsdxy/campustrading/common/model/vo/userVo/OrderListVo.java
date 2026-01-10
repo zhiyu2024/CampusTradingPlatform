@@ -11,7 +11,6 @@ public class OrderListVo {
     private String orderNo;
     private Integer productId;
     private String productName;
-    private String productImage; // 列表只显示第一张图
     private BigDecimal totalAmount;
     private Integer status;
     private LocalDateTime createdAt;
