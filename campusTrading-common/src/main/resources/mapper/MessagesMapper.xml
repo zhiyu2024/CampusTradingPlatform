@@ -29,26 +29,43 @@
     </select>
 
     <!-- 查询会话列表 -->
+    <!-- 查询会话列表 -->
     <select id="selectChatSessionList" resultType="cn.gdsdxy.campustrading.common.model.vo.userVo.MessageChatSessionVo">
         SELECT
-            m.product_id,
-            p.product_name,
-            pi.image_url AS productImage,
-            IF(m.sender_id = #{userId}, m.receiver_id, m.sender_id) AS oppositeUserId,
-            IF(m.sender_id = #{userId}, receiver.nickname, sender.nickname) AS oppositeNickname,
-            IF(m.sender_id = #{userId}, receiver.avatar, sender.avatar) AS oppositeAvatar,
-            SUBSTRING_INDEX(GROUP_CONCAT(m.content ORDER BY m.created_at DESC SEPARATOR '|||'), '|||', 1) AS latestMessage,
-            MAX(m.message_type) AS latestMessageType,
-            COUNT(CASE WHEN m.receiver_id = #{userId} AND m.is_read = 0 THEN 1 END) AS unreadCount,
-            MAX(m.created_at) AS latestMessageTime
-        FROM messages m
-                 INNER JOIN products p ON m.product_id = p.product_id
-                 LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.sort_order = 0
-                 INNER JOIN users sender ON m.sender_id = sender.user_id AND sender.status = 1
-                 INNER JOIN users receiver ON m.receiver_id = receiver.user_id AND receiver.status = 1
-        WHERE (m.sender_id = #{userId} OR m.receiver_id = #{userId})
-        GROUP BY m.product_id, oppositeUserId
-        ORDER BY latestMessageTime DESC
+            t.product_id,
+            t.product_name,
+            t.productImage,
+            IF(t.sender_id = #{userId}, t.receiver_id, t.sender_id) AS oppositeUserId,
+            IF(t.sender_id = #{userId}, t.receiverNickname, t.senderNickname) AS oppositeNickname,
+            IF(t.sender_id = #{userId}, t.receiverAvatar, t.senderAvatar) AS oppositeAvatar,
+            t.latestMessage,
+            t.latestMessageType,
+            t.unreadCount,
+            t.latestMessageTime
+        FROM (
+                 SELECT
+                     m.product_id,
+                     p.product_name,
+                     MAX(pi.image_url) AS productImage,
+                     m.sender_id,
+                     m.receiver_id,
+                     sender.nickname AS senderNickname,
+                     receiver.nickname AS receiverNickname,
+                     sender.avatar AS senderAvatar,
+                     receiver.avatar AS receiverAvatar,
+                     SUBSTRING_INDEX(GROUP_CONCAT(m.content ORDER BY m.created_at DESC SEPARATOR '|||'), '|||', 1) AS latestMessage,
+                     MAX(m.message_type) AS latestMessageType,
+                     COUNT(CASE WHEN m.receiver_id = #{userId} AND m.is_read = 0 THEN 1 END) AS unreadCount,
+                     MAX(m.created_at) AS latestMessageTime
+                 FROM messages m
+                          INNER JOIN products p ON m.product_id = p.product_id
+                          LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.sort_order = 0
+                          INNER JOIN users sender ON m.sender_id = sender.user_id AND sender.status = 1
+                          INNER JOIN users receiver ON m.receiver_id = receiver.user_id AND receiver.status = 1
+                 WHERE (m.sender_id = #{userId} OR m.receiver_id = #{userId})
+                 GROUP BY m.product_id, m.sender_id, m.receiver_id  -- ✅ 内层GROUP BY包含所有非聚合列
+             ) t
+        ORDER BY t.latestMessageTime DESC
     </select>
 
     <!-- 批量标记已读 -->

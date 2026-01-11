@@ -22,49 +22,50 @@ public class UserMessageController {
       IMessagesService messagesService;
 
     @PostMapping("/send")
-    public FwResult<Void> sendMessage( @RequestBody MessageSendParam param) {
+    public FwResult<String> sendMessage( @RequestBody MessageSendParam param) {//发送信息给指定用户
         messagesService.sendMessage(param);
-        return FwResult.ok();
+        return FwResult.ok("信息发送成功");
     }
 
     @GetMapping("/chat")
-    public FwResult<List<MessageVo>> getChatRecord(
+    public FwResult<List<MessageVo>> getChatRecord(//获取与指定用户的聊天记录
             @RequestParam Integer productId,
             @RequestParam Integer otherUserId) {
+
         return FwResult.ok(messagesService.getChatRecord(productId, otherUserId));
     }
 
     @GetMapping("/sessions")
-    public FwResult<List<MessageChatSessionVo>> getChatSessionList() {
+    public FwResult<List<MessageChatSessionVo>> getChatSessionList() {//获取当前用户的聊天记录,聊天列表
         return FwResult.ok(messagesService.getChatSessionList());
     }
 
-    @PostMapping("/read/{messageId}")//读消息
-    public FwResult<Void> markAsRead(@PathVariable Integer messageId) {
+    @PostMapping("/read")//读消息
+    public FwResult<String> markAsRead(@RequestParam Integer messageId) {
         messagesService.markAsRead(messageId);
-        return FwResult.ok();
+        return FwResult.ok("您已读此条信息");
     }
 
     @PostMapping("/read/batch")//全部已读
-    public FwResult<Void> markAllAsRead(
+    public FwResult<String> markAllAsRead(
             @RequestParam Integer productId,
             @RequestParam Integer otherUserId) {
         messagesService.markAllAsRead(productId, otherUserId);
-        return FwResult.ok();
+        return FwResult.ok("您已读了全部信息");
     }
 
-    @DeleteMapping("/chat")
-    public FwResult<Void> deleteChatRecord(
+    @DeleteMapping("/delete/chat")//删除聊天记录
+    public FwResult<String> deleteChatRecord(
             @RequestParam Integer productId,
             @RequestParam Integer otherUserId) {
         messagesService.deleteChatRecord(productId, otherUserId);
-        return FwResult.ok();
+        return FwResult.ok("您成功删除了与对方的聊天信息");
     }
 
-    @DeleteMapping("/{messageId}")
-    public FwResult<Void> deleteMessage(@PathVariable Integer messageId) {
+    @DeleteMapping("/delete")//删除一条信息
+    public FwResult<String> deleteMessage(@RequestParam Integer messageId) {
         messagesService.deleteMessage(messageId);
-        return FwResult.ok();
+        return FwResult.ok("您成功删除了一条信息");
     }
 
 
