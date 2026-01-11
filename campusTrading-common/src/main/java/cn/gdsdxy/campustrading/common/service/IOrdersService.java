@@ -30,7 +30,7 @@ public interface IOrdersService extends IService<OrdersEntity> {
     /**
      * 订单支付
      */
-    void payOrder( OrderPayParam param);
+    void payOrder( Integer orderId);
 
     /**
      * 获取订单详情

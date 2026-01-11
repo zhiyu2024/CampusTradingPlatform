@@ -6,13 +6,12 @@ import cn.gdsdxy.campustrading.common.entity.UsersEntity;
 import cn.gdsdxy.campustrading.common.model.dto.publicDto.RegisterParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.UpdateUserParam;
 import cn.gdsdxy.campustrading.common.model.vo.adminVo.AdminInfoVo;
-import cn.gdsdxy.campustrading.common.model.vo.adminVo.AdminRegisterParam;
+import cn.gdsdxy.campustrading.common.model.dto.adminDto.AdminRegisterParam;
 import cn.gdsdxy.campustrading.common.model.vo.adminVo.DashboardVo;
 import cn.gdsdxy.campustrading.common.model.vo.adminVo.DataBoardVo;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.LoginVo;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.UserInfoVo;
-import cn.gdsdxy.campustrading.common.result.FwResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

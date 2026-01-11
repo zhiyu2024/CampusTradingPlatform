@@ -15,7 +15,9 @@ import cn.gdsdxy.campustrading.common.util.SecurityUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
  * @author CampusTrading
  * @since 2026-01-05
  */
+@Slf4j//日志记录的关键
 @Service
 public class CartServiceImpl extends ServiceImpl<CartMapper, CartEntity> implements ICartService {
     @Autowired
@@ -189,12 +192,25 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, CartEntity> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "cart", key = "#userId")  // ✅ 删除缓存
     public void clearCart() {
         Long userId = SecurityUtil.getUserId();
-      boolean cartClear=  lambdaUpdate().eq(CartEntity::getUserId, userId.intValue()).remove();
-      if(!cartClear){
-          throw new BusinessException(393,"您没有权限操作该购物车");
-      }
+        // 1. 记录操作日志
+        log.info("[购物车] 用户 {} 正在清空购物车", userId);
+        // 先查询购物车是否有数据
+        long count = lambdaQuery().eq(CartEntity::getUserId, userId.intValue()).count();
+        log.debug("[购物车] 用户 {} 购物车中有 {} 件商品", userId, count);
+        if (count > 0) {
+            // 有数据才删除
+            lambdaUpdate().eq(CartEntity::getUserId, userId.intValue()).remove();
+        }
+        // 4. 记录删除结果
+        if (count>0) {
+            log.info("[购物车] 用户 {} 成功清空 {} 件商品", userId, count);
+        } else {
+            log.warn("[购物车] 用户 {} 清空购物车失败，未删除任何数据", userId);
+        }
+
     }
 }
 

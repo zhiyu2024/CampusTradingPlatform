@@ -101,11 +101,11 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, OrdersEntity> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void payOrder(OrderPayParam param) {
+    public void payOrder( Integer orderId) {
         Long userId = SecurityUtil.getUserId();
 
         // 1. 校验订单
-        OrdersEntity order = ordersMapper.selectById(param.getOrderId());
+        OrdersEntity order = ordersMapper.selectById(orderId);
         if (order == null || !order.getBuyerId().equals(userId.intValue())) {
             throw new BusinessException(3004, "订单不存在");
         }

@@ -1,4 +1,4 @@
-package cn.gdsdxy.campustrading.common.model.vo.adminVo;
+package cn.gdsdxy.campustrading.common.model.dto.adminDto;
 
 import lombok.Data;
 

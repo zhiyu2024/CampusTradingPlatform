@@ -27,15 +27,15 @@ public class UserOrderController {
     @PostMapping("/create")
     public FwResult<Integer> createOrder(@RequestBody OrderCreateParam param) {
         Integer orderId = iOrdersService.createOrder(param);
-        return FwResult.ok(orderId);
+        return FwResult.ok("订单Id:",orderId);
     }
 
     /**
      * 订单支付
      */
     @PostMapping("/pay")
-    public FwResult<String> payOrder(@RequestBody OrderPayParam param) {
-        iOrdersService.payOrder( param);
+    public FwResult<String> payOrder(@RequestParam Integer orderId) {
+        iOrdersService.payOrder( orderId);
         return FwResult.ok("支付成功");
     }
 
