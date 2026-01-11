@@ -6,6 +6,7 @@ import cn.gdsdxy.campustrading.common.entity.UsersEntity;
 import cn.gdsdxy.campustrading.common.mapper.UsersMapper;
 import cn.gdsdxy.campustrading.common.model.dto.publicDto.RegisterParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.UpdateUserParam;
+import cn.gdsdxy.campustrading.common.model.vo.adminVo.DashboardVo;
 import cn.gdsdxy.campustrading.common.model.vo.publicVo.RegisterVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.UserInfoVo;
 import cn.gdsdxy.campustrading.common.result.FwResultCode;
@@ -220,5 +221,24 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, UsersEntity> impl
             throw new BusinessException(904, "手机号已被注册");
         }
     }
+
+
+//    ------------------管理员-----------------
+    @Override
+    public  DashboardVo getDashboardData(){
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

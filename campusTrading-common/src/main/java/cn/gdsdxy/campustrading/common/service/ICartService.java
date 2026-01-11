@@ -1,9 +1,8 @@
 package cn.gdsdxy.campustrading.common.service;
 
 import cn.gdsdxy.campustrading.common.entity.CartEntity;
-import cn.gdsdxy.campustrading.common.model.dto.userDto.CartUpdateParam;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.MessageCartUpdateParam;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.CartVo;
-import cn.gdsdxy.campustrading.common.result.FwResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public interface ICartService extends IService<CartEntity> {
     /**
      * 修改商品数量
      */
-    void updateQuantity( CartUpdateParam param);//解析请求头携带的token 然后获取token里面的userId
+    void updateQuantity( MessageCartUpdateParam param);//解析请求头携带的token 然后获取token里面的userId
   //修改该用户商品数量
     /**
      * 移除购物车商品

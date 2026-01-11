@@ -1,6 +1,8 @@
 package cn.gdsdxy.campustrading.controller.user;
 
+import cn.gdsdxy.campustrading.common.model.dto.userDto.MessageQueryParam;
 import cn.gdsdxy.campustrading.common.model.dto.userDto.MessageSendParam;
+import cn.gdsdxy.campustrading.common.model.vo.userVo.MessageChatSessionVo;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.MessageVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IMessagesService;
@@ -16,55 +18,58 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user/message")
 public class UserMessageController {
-    @Autowired
-    IMessagesService iMessagesService;
-    // 在UserMessageController类中添加
+       @Autowired
+      IMessagesService messagesService;
 
-    /**
-     * 发送消息
-     */
     @PostMapping("/send")
-    public FwResult<String> sendMessage(@RequestBody MessageSendParam param) {
-        iMessagesService.sendMessage(param);
-        return FwResult.ok("发送成功");
+    public FwResult<Void> sendMessage( @RequestBody MessageSendParam param) {
+        messagesService.sendMessage(param);
+        return FwResult.ok();
     }
 
-    /**
-     * 获取聊天记录
-     */
     @GetMapping("/chat")
-    public FwResult<List<MessageVo>> getChatRecord(@RequestParam Integer productId,
-                                                   @RequestParam Integer otherUserId) {
-        List<MessageVo> list = iMessagesService.getChatRecord( productId, otherUserId);
-        return FwResult.ok(list);
+    public FwResult<List<MessageVo>> getChatRecord(
+            @RequestParam Integer productId,
+            @RequestParam Integer otherUserId) {
+        return FwResult.ok(messagesService.getChatRecord(productId, otherUserId));
     }
 
-    /**
-     * 标记消息已读
-     */
-    @PostMapping("/read")
-    public FwResult<String> markAsRead(@RequestParam Integer messageId) {
-        iMessagesService.markAsRead( messageId);
-        return FwResult.ok("标记成功");
+    @GetMapping("/sessions")
+    public FwResult<List<MessageChatSessionVo>> getChatSessionList() {
+        return FwResult.ok(messagesService.getChatSessionList());
     }
 
-    /**
-     * 删除聊天记录
-     */
-    @PostMapping("/chat")
-    public FwResult<String> deleteChatRecord(@RequestParam Integer productId,
-                                             @RequestParam Integer otherUserId) {
-        iMessagesService.deleteChatRecord( productId, otherUserId);
-        return FwResult.ok("删除成功");
+    @PostMapping("/read/{messageId}")//读消息
+    public FwResult<Void> markAsRead(@PathVariable Integer messageId) {
+        messagesService.markAsRead(messageId);
+        return FwResult.ok();
     }
 
-    /**
-     * 删除单条消息
-     */
-    @PostMapping("/{messageId}")
-    public FwResult<String> deleteMessage(@RequestHeader("Authorization") String token,
-                                          @PathVariable Integer messageId) {
-        iMessagesService.deleteMessage( messageId);
-        return FwResult.ok("删除成功");
+    @PostMapping("/read/batch")//全部已读
+    public FwResult<Void> markAllAsRead(
+            @RequestParam Integer productId,
+            @RequestParam Integer otherUserId) {
+        messagesService.markAllAsRead(productId, otherUserId);
+        return FwResult.ok();
+    }
+
+    @DeleteMapping("/chat")
+    public FwResult<Void> deleteChatRecord(
+            @RequestParam Integer productId,
+            @RequestParam Integer otherUserId) {
+        messagesService.deleteChatRecord(productId, otherUserId);
+        return FwResult.ok();
+    }
+
+    @DeleteMapping("/{messageId}")
+    public FwResult<Void> deleteMessage(@PathVariable Integer messageId) {
+        messagesService.deleteMessage(messageId);
+        return FwResult.ok();
+    }
+
+
+    @GetMapping("/unread/count")//未读
+    public FwResult<Integer> getUnreadCount() {
+        return FwResult.ok(messagesService.getUnreadCount());
     }
 }

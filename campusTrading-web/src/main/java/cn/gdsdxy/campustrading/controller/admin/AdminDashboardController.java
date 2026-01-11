@@ -21,9 +21,10 @@ public class AdminDashboardController {
     @Autowired
     IUsersService iUsersService;
 
-//    @GetMapping("/stats")
-//    public FwResult<DashboardVo> getDashboardData() {
-//        DashboardVo dashboardVo = iUsersService.getDashboardData();
-//        return FwResult.ok(dashboardVo);
-//    }
+    @GetMapping("/stats")
+    public FwResult<DashboardVo> getDashboardData() {
+        DashboardVo dashboardVo = iUsersService.getDashboardData();
+
+        return FwResult.ok(dashboardVo);
+    }
 }

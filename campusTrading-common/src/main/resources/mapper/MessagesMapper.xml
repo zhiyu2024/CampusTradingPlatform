@@ -2,4 +2,79 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.gdsdxy.campustrading.common.mapper.MessagesMapper">
 
+    <!-- 查询聊天记录 -->
+    <select id="selectChatRecord" resultType="cn.gdsdxy.campustrading.common.model.vo.userVo.MessageVo">
+        SELECT
+            m.message_id,
+            m.product_id,
+            p.product_name,
+            m.sender_id,
+            sender.nickname AS senderNickname,
+            sender.avatar AS senderAvatar,
+            m.receiver_id,
+            receiver.nickname AS receiverNickname,
+            receiver.avatar AS receiverAvatar,
+            m.content,
+            m.message_type,
+            m.is_read,
+            m.created_at
+        FROM messages m
+                 INNER JOIN products p ON m.product_id = p.product_id
+                 INNER JOIN users sender ON m.sender_id = sender.user_id AND sender.status = 1
+                 INNER JOIN users receiver ON m.receiver_id = receiver.user_id AND receiver.status = 1
+        WHERE m.product_id = #{productId}
+          AND ((m.sender_id = #{userId} AND m.receiver_id = #{otherUserId})
+            OR (m.sender_id = #{otherUserId} AND m.receiver_id = #{userId}))
+        ORDER BY m.created_at ASC
+    </select>
+
+    <!-- 查询会话列表 -->
+    <select id="selectChatSessionList" resultType="cn.gdsdxy.campustrading.common.model.vo.userVo.MessageChatSessionVo">
+        SELECT
+            m.product_id,
+            p.product_name,
+            pi.image_url AS productImage,
+            IF(m.sender_id = #{userId}, m.receiver_id, m.sender_id) AS oppositeUserId,
+            IF(m.sender_id = #{userId}, receiver.nickname, sender.nickname) AS oppositeNickname,
+            IF(m.sender_id = #{userId}, receiver.avatar, sender.avatar) AS oppositeAvatar,
+            SUBSTRING_INDEX(GROUP_CONCAT(m.content ORDER BY m.created_at DESC SEPARATOR '|||'), '|||', 1) AS latestMessage,
+            MAX(m.message_type) AS latestMessageType,
+            COUNT(CASE WHEN m.receiver_id = #{userId} AND m.is_read = 0 THEN 1 END) AS unreadCount,
+            MAX(m.created_at) AS latestMessageTime
+        FROM messages m
+                 INNER JOIN products p ON m.product_id = p.product_id
+                 LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.sort_order = 0
+                 INNER JOIN users sender ON m.sender_id = sender.user_id AND sender.status = 1
+                 INNER JOIN users receiver ON m.receiver_id = receiver.user_id AND receiver.status = 1
+        WHERE (m.sender_id = #{userId} OR m.receiver_id = #{userId})
+        GROUP BY m.product_id, oppositeUserId
+        ORDER BY latestMessageTime DESC
+    </select>
+
+    <!-- 批量标记已读 -->
+    <update id="markAllAsRead">
+        UPDATE messages
+        SET is_read = 1
+        WHERE product_id = #{productId}
+          AND receiver_id = #{userId}
+          AND sender_id = #{otherUserId}
+          AND is_read = 0
+    </update>
+
+    <!-- 删除聊天记录 -->
+    <delete id="deleteChatRecord">
+        DELETE FROM messages
+        WHERE product_id = #{productId}
+          AND ((sender_id = #{userId} AND receiver_id = #{otherUserId})
+            OR (sender_id = #{otherUserId} AND receiver_id = #{userId}))
+    </delete>
+
+    <!-- 统计未读消息数量 -->
+    <select id="countUnreadMessages" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM messages m
+                 INNER JOIN users sender ON m.sender_id = sender.user_id AND sender.status = 1
+        WHERE m.receiver_id = #{userId}
+          AND m.is_read = 0
+    </select>
 </mapper>

@@ -3,9 +3,11 @@ package cn.gdsdxy.campustrading.common.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,9 +20,9 @@ import java.util.Date;
  * @author CampusTrading
  * @since 2026-01-05
  */
-@Getter
-@Setter
+@Data
 @ToString
+@Accessors(chain = true)  // 关键注解！让 setter 返回 this
 @TableName("messages")
 public class MessagesEntity implements Serializable {
 

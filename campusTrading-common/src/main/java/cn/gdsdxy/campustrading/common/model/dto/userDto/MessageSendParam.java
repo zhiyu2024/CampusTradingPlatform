@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class MessageSendParam {
+
     private Integer productId;
     private Integer receiverId;//接受者Id
     private String content;//消息内容不能为空

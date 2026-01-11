@@ -1,6 +1,6 @@
 package cn.gdsdxy.campustrading.controller.user;
 
-import cn.gdsdxy.campustrading.common.model.dto.userDto.CartUpdateParam;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.MessageCartUpdateParam;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.CartVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.ICartService;
@@ -40,7 +40,7 @@ public class UserCartController {
      * 修改商品数量
      */
     @PostMapping("/update")
-    public FwResult<String> updateQuantity(@RequestBody CartUpdateParam param) {
+    public FwResult<String> updateQuantity(@RequestBody MessageCartUpdateParam param) {
         iCartService.updateQuantity(param);
         return FwResult.ok("更新成功");
     }

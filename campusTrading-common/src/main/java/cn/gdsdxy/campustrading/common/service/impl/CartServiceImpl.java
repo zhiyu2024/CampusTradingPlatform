@@ -7,10 +7,8 @@ import cn.gdsdxy.campustrading.common.exception.BusinessException;
 import cn.gdsdxy.campustrading.common.mapper.CartMapper;
 import cn.gdsdxy.campustrading.common.mapper.ProductImagesMapper;
 import cn.gdsdxy.campustrading.common.mapper.ProductsMapper;
-import cn.gdsdxy.campustrading.common.mapper.UsersMapper;
-import cn.gdsdxy.campustrading.common.model.dto.userDto.CartUpdateParam;
+import cn.gdsdxy.campustrading.common.model.dto.userDto.MessageCartUpdateParam;
 import cn.gdsdxy.campustrading.common.model.vo.userVo.CartVo;
-import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.ICartService;
 import cn.gdsdxy.campustrading.common.util.JwtUtils;
 import cn.gdsdxy.campustrading.common.util.SecurityUtil;
@@ -147,7 +145,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, CartEntity> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateQuantity(CartUpdateParam param) {
+    public void updateQuantity(MessageCartUpdateParam param) {
         Long userId = SecurityUtil.getUserId();
 
         // 1. 校验购物车项存在且属于当前用户

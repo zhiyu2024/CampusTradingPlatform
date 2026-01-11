@@ -33,5 +33,5 @@ public interface IUsersService extends IService<UsersEntity> {
 //    AdminVo AdminLogin(AdminLoginParam param);
 //   AdminInfoVo getAdminInfo();//String token
 //    void AdminLogout();//String token
-//    DashboardVo  getDashboardData();
+    DashboardVo  getDashboardData();
 }
