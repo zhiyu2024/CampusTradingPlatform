@@ -26,7 +26,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
 
-
     public JwtFilter() {
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }

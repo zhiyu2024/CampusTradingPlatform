@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/api/**",
                                 "/api/public/**",
                                 "/res/images/**",       // ✅ 上传的图片（关键）
                                 "/images/**",           // ✅ 静态图片（如果有）

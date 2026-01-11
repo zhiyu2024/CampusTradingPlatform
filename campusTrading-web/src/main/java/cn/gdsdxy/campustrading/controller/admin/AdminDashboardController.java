@@ -1,6 +1,7 @@
 package cn.gdsdxy.campustrading.controller.admin;
 
 import cn.gdsdxy.campustrading.common.model.vo.adminVo.DashboardVo;
+import cn.gdsdxy.campustrading.common.model.vo.adminVo.DataBoardVo;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IUsersService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j // ✅ 添加日志
 @Tag(name = "管理员数据管理", description = "管理员数据管理相关接口") // ✅ 使用 @Tag
 @RestController
-@RequestMapping("/admin/dashboard")
+@RequestMapping("/api/admin/dashboard")
 public class AdminDashboardController {
 
     @Autowired
@@ -27,4 +28,10 @@ public class AdminDashboardController {
 
         return FwResult.ok(dashboardVo);
     }
+    @GetMapping("/data")
+    public FwResult<DataBoardVo> DataBoardData() {
+        DataBoardVo data = iUsersService.getDataBoardData();
+        return FwResult.ok(data);
+    }
+
 }

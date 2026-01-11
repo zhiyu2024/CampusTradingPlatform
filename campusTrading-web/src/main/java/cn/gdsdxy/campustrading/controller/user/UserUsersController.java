@@ -48,7 +48,7 @@ public class UserUsersController {
      * 修改资料（支持头像上传）
      */
     @PostMapping(value = "/update", consumes = "multipart/form-data")
-    public FwResult<String> updateUserInfo(@RequestPart("param") UpdateUserParam param,
+    public FwResult<String> updateUserInfo(@ModelAttribute  UpdateUserParam param,
                                            @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
         param.setAvatar(avatar);
         iUsersService.updateUserInfo(param);

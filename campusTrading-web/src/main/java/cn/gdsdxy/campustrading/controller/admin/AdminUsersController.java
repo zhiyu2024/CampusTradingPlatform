@@ -1,6 +1,8 @@
 package cn.gdsdxy.campustrading.controller.admin;
 
 import cn.gdsdxy.campustrading.common.model.dto.adminDto.AdminLoginParam;
+import cn.gdsdxy.campustrading.common.model.vo.adminVo.AdminInfoVo;
+import cn.gdsdxy.campustrading.common.model.vo.adminVo.AdminRegisterParam;
 import cn.gdsdxy.campustrading.common.result.FwResult;
 import cn.gdsdxy.campustrading.common.service.IUsersService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,22 +26,26 @@ public class AdminUsersController {
     @Autowired
     IUsersService iAdminService;
 
-//    @PostMapping("/login")
-//    public FwResult<AdminInfoVo> login(@RequestBody AdminLoginParam param) {
-//        AdminInfoVo adminInfoVo=   iAdminService.AdminLogin(param);
-//        return FwResult.ok(adminInfoVo);
-//    }
+    @PostMapping("/login")
+    public FwResult<AdminInfoVo> login(@RequestBody AdminLoginParam param) {
+        AdminInfoVo adminInfoVo=   iAdminService.AdminLogin(param);
+        return FwResult.ok(adminInfoVo);
+    }
+     @PostMapping("/register")
+     public FwResult<String> registerAdmin(@RequestBody AdminRegisterParam param){
+         iAdminService.Adminregister(param);
+        return FwResult.ok("注册成功");
+     }
+    @GetMapping("/info")
+    public FwResult<AdminInfoVo> getAdminInfo() {
+        AdminInfoVo adminInfo = iAdminService.getAdminInfo();
+        return FwResult.ok(adminInfo);
+    }
 
-//    @GetMapping("/info")
-//    public FwResult<AdminInfoVo> getAdminInfo() {
-//        AdminInfoVo adminInfo = iAdminService.getAdminInfo();
-//        return FwResult.ok(adminInfo);
-//    }
-
-//    @PostMapping("/logout")
-//    public FwResult<String> logout() {
-//        iAdminService.AdminLogout();
-//        return FwResult.ok("退出成功");
-//    }
+    @PostMapping("/logout")
+    public FwResult<String> logout() {
+        iAdminService.AdminLogout();
+        return FwResult.ok("退出成功");
+    }
 
 }
