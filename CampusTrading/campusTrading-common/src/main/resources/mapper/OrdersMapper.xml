@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gdsdxy.campustrading.common.mapper.OrdersMapper">
+
+    <!-- 管理员查询订单列表（包含关联信息） -->
+    <select id="selectOrderListWithDetails" resultType="cn.gdsdxy.campustrading.common.model.vo.adminVo.OrderListVo">
+        SELECT
+            o.order_id,
+            o.order_no,
+            o.quantity,
+            o.product_id,
+            p.product_name,
+            o.buyer_id,
+            bu.nickname AS buyer_nickname,
+            o.seller_id,
+            su.nickname AS seller_nickname,
+            o.status,
+            o.total_amount,
+            o.buyer_note,
+            o.created_at,
+            o.updated_at
+        FROM orders o
+        LEFT JOIN products p ON o.product_id = p.product_id
+        LEFT JOIN users bu ON o.buyer_id = bu.user_id
+        LEFT JOIN users su ON o.seller_id = su.user_id
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                AND o.order_no LIKE CONCAT('%', #{orderNo}, '%')
+            </if>
+            <if test="status != null">
+                AND o.status = #{status}
+            </if>
+        </where>
+        ORDER BY o.created_at DESC
+    </select>
+
+</mapper>
